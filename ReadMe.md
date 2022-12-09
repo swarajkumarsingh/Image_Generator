@@ -1,6 +1,8 @@
 # AI Image Generator
 
-## This project is composed of nodejs and openAI.
+### This project is composed of **Nodejs** and **OpenAI**. This repo generates images based on the prompt given and also stores the data fields form coming from the client side, this project uses a well known AI API which is **OPEN-AI**.
+
+#
 
 ## Installation
 
@@ -10,14 +12,37 @@
 npm install
 ```
 
+## Note:-
+### To Run the repository you will to get your own OpenAI api key and create a file key.js and paste the credentials.
+
+```
+path: root/config/keys.js
+
+module.exports = {
+  OPEN_AI_KEY: "YOUR_OPEN_AI_KEY",
+};
+
+```
+
+
 ## Folder Structure
 
 ```
 
+- config
+  - key.js
+- controllers
+  - image.controller.js
+- db
+ - db.js
 - models
-  - shortUrls.js
-- views
+  - image.model.js
+- public
+  - css
+  - js
   - index.ejs
+- routes
+  - image.route.js
 - server.js
 
 ```
@@ -32,7 +57,7 @@ app.use(express.static(path.join(__dirname, "public")));
 ```
 
 
-## Endpoint: ***/openai*** Request-Type: ***POST***
+## Endpoint: ***/openai/generate-image*** Request-Type: ***POST***
 ```
     const response = await openai.createImage({ 
       prompt: prompt,
@@ -43,6 +68,22 @@ app.use(express.static(path.join(__dirname, "public")));
     const imageUrl = response.data.data[0].url;
 
     # Request to OPEN-AI for Image-URL    
+
+    await model.create({            
+      prompt,
+      size,
+      imageUrl,
+    });
+
+    # Store Data to Local-DB
+
+```
+
+
+## Endpoint: ***/openai/get-images*** Request-Type: ***GET***
+```
+
+  const data = await model.find();      # Get All Images
 
 ```
 

@@ -1,4 +1,5 @@
 const { Configuration, OpenAIApi } = require("openai");
+const model = require("../models/image.model.js");
 const { OPEN_AI_KEY } = require("../config/keys.js");
 
 const configuration = new Configuration({
@@ -21,6 +22,12 @@ const generateImage = async (req, res) => {
 
     const imageUrl = response.data.data[0].url;
 
+    await model.create({
+      prompt,
+      size,
+      imageUrl,
+    });
+
     return res.status(200).json({
       success: true,
       data: imageUrl,
@@ -33,4 +40,22 @@ const generateImage = async (req, res) => {
   }
 };
 
-module.exports = { generateImage };
+const getAllImages = async (req, res) => {
+  try {
+    const data = await model.find();
+
+    return res.status(200).json({
+      success: true,
+      length: data.length,
+      data: data,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      error: "error while fetching table data",
+    });
+  }
+};
+
+module.exports = { generateImage, getAllImages };
