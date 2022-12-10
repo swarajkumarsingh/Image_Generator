@@ -1,8 +1,13 @@
+// const express = require("express");
+// const path = require("path");
+// const connectDatabase = require("./db/db.js");
+
+import express from "express"
+import path from "path"
+import connectDatabase from "./db/db.js"
+
 const PORT = 5000;
-const express = require("express");
-const path = require("path");
 const app = express();
-const connectDatabase = require("./db/db.js");
 
 // Enable body parser
 app.use(express.json());
@@ -15,7 +20,7 @@ connectDatabase();
 app.use(express.static(path.join(__dirname, "public")));
 
 // Router
-app.use("/openai", require("./routes/image.router.js"));
+app.use("/api/v1", require("./routes/image.router.js"));
 
 app.listen(PORT, () => {
   console.log(`server connected to http://localhost:${PORT}/`);
